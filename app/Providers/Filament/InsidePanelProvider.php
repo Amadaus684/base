@@ -28,6 +28,7 @@ class InsidePanelProvider extends PanelProvider
             ->id('inside')
             ->path('inside')
             ->login()
+            ->SPA()
             ->colors([
                 'primary' => Color::Amber,
             ])
