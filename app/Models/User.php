@@ -52,8 +52,8 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
 
     }
 
-    // public function activityLogs(): HasMany
-    // {
-    //     return $this->hasMany(ActivityLog::class);
-    // }
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }

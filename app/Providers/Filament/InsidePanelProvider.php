@@ -18,6 +18,9 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\View\PanelsRenderHook;
+use Filament\Enums\ThemeMode;
+use Illuminate\Support\Facades\Blade;
 
 class InsidePanelProvider extends PanelProvider
 {
@@ -28,9 +31,16 @@ class InsidePanelProvider extends PanelProvider
             ->id('inside')
             ->path('inside')
             ->login()
-            ->SPA()
+            ->spa()
+            ->defaultThemeMode(ThemeMode::Dark)
+            ->font('Sansation')
+            ->brandLogo(asset('logo.svg'))
+            ->brandLogoHeight('2rem')
+            ->brandName('Space')
+            ->favicon(asset('favicon.ico'))
             ->colors([
-                'primary' => Color::Amber,
+                // 'primary' => Color::Indigo,
+                'primary' => '#05f5f9',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -42,6 +52,18 @@ class InsidePanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::FOOTER,
+                fn () => Blade::render('
+                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-4">
+                        {{ config("app.name") }}
+                        <span class="mx-1">•</span>
+                        v{{ config("app.version") }}
+                        <span class="mx-1">•</span>
+                        © {{ date("Y") }}
+                    </div>
+                '),
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
